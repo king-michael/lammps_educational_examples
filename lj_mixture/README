@@ -12,7 +12,7 @@ Examples how to run the script
 
 $ ./run.sh  # predefine command
 $ mpirun lmp -in input.lammps # mpirun
-$ mpirun lmp -in input.lammps # mpirun + accelerated OMP styles
+$ mpirun lmp -in input.lammps -sf omp -pk omp 1 # mpirun + accelerated OMP styles
 
 ## GPU
 
