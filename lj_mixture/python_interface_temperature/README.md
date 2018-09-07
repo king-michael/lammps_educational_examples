@@ -8,14 +8,11 @@ liquid at temperature =  0.741
 # HowTo
 Examples how to run the script
 
-## MPI
+  python script  LAMMPS script couple_frequency
+``$ python vizplotgui_pymol.py input.lammps 100`
 
-$ ./run.sh  # predefine command
-$ mpirun lmp -in input.lammps # mpirun
-$ mpirun lmp -in input.lammps -sf omp -pk omp 1 # mpirun + accelerated OMP styles
-
-## GPU
-
-$ ./run_gpu.sh # predefine command
-$ lmp -in input.lammps -sf gpu -pk gpu 1 # single core + gpu (faster then MPI!)
+### serial
+``$ python vizplotgui_pymol.py input.lammps 100`
+### MPI
+``$ mpirun python vizplotgui_pymol.py input.lammps 100`
 
