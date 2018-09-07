@@ -30,7 +30,7 @@ velocity	all create 0.741 87287
 # write out the data so we can see it later
 write_data system_start.data
 # write a pdb file (uses molfile plugin - VMD)
-write_dump all molfile system_start.pdb pdb ../libs/molfile
+write_dump all molfile system_start.pdb pdb ../../libs/molfile
 
 #=====================================#
 # force field parameter

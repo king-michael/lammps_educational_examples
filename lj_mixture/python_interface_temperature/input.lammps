@@ -1,0 +1,102 @@
+# 3d Lennard-Jones melt
+
+#=====================================#
+# Initialization
+#=====================================#
+# Definition unit system and atom_style
+units       lj
+atom_style  atomic
+
+#=====================================#
+# setup the system
+#=====================================#
+# Creation of the System
+lattice     fcc 0.8442                # defines lattice type and density
+region      box block 0 10 0 10 0 10  # defines region of simulation box (units lattice)
+create_box    2 box                   # creates simulation box for 2 atom types
+create_atoms  1 box                   # creates atoms of type 1 in box
+set type 1 type/fraction 2 0.5 1234   # convert 50% of type 1 to type 2 with a random seed of 1234
+
+# https://lammps.sandia.gov/doc/change_box.html
+# change_box all x scale 1.1 y final 0 40 z volume remap # scale x by 1.1 define ylo, yhi = 0, 40 and adjust z that the volume is preserved
+
+# Definition of mass
+mass    1 1.0  # set mass of type 1
+mass    2 1.0  # set mass of type 2
+
+# create velocity for all atoms with a temperature of 0.741 and a random seed of 87287
+velocity	all create 0.741 87287
+
+# write out the data so we can see it later
+write_data system_start.data
+# write a pdb file (uses molfile plugin - VMD)
+write_dump all molfile system_start.pdb pdb ../../libs/molfile
+
+#=====================================#
+# force field parameter
+#=====================================#
+
+# Define pair_style and cutoff
+pair_style	lj/cut 2.5
+# define pair_coeff
+#           i j epsilon sigma (optional rcut)
+pair_coeff  1 1   1.0   1.0   2.5
+pair_coeff  1 2   1.0   1.0   2.5
+pair_coeff  2 2   1.0   1.0   2.5
+
+#=====================================#
+# other settings
+#=====================================#
+
+timestep    0.001 # default(lj) = 0.005 tau
+
+# neighbor list settings
+neighbor      0.3 bin  # ghost_cutoff and neighbor build method
+neigh_modify  every 20 delay 0 check no # options to build the neighbor list
+
+
+#=====================================#
+# MD engine
+#=====================================#
+# define a fix to update the positions
+# optional define a fix to control temperature
+# optional define a fix to control pressure
+
+#---------------------------#
+# NVT (v-rescale)
+#---------------------------#
+fix md   all nve # enables postion update -> produce NVE ensemble
+# fix ID group-ID temp/csvr Tstart Tstop Tdamp seed
+fix temp all temp/csvr 0.741 0.741 0.05 54324 # enables the v-rescale thermostat
+
+#---------------------------#
+# NVT (Berendsen)
+#---------------------------#
+# fix md   all nve # enables postion update -> produce NVE ensemble
+# # fix ID group-ID temp/berendsen Tstart Tstop Tdamp
+# fix temp all temp/berendsen 0.741 0.741 0.05 54324 # enables the Berendsen thermostat
+
+#---------------------------#
+# NVT (Nose-Hoover)
+#---------------------------#
+# fix ID group-ID style_name keyword value ...
+# fix md all nvt temp 0.741 0.741 0.05 # enables postion update -> produce NVT ensemble with Nose-Hoover
+
+
+#=====================================#
+# Output
+#=====================================#
+
+# thermo  1000  # write thermo output every 1000 steps
+# # defome what output we want to print
+# thermo_style custom step temp pe etotal press vol cpu cpuremain
+# thermo_modify flush yes # flush thermo output
+# 
+# # write a xtc trajectory file every 1000 steps for group = all
+# dump 1 all dcd 1000 traj.dcd
+
+#=====================================#
+# Simulation
+#=====================================#
+
+# run $(100e3) # runs 1*10^6 steps (inplace $(calculation) )
