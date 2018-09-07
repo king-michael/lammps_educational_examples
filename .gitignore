@@ -10,6 +10,7 @@ __pycache__/
 # C extensions
 *.so
 !pdbplugin.so
+!pdbxplugin.so
 
 # Distribution / packaging
 .Python
