@@ -11,7 +11,7 @@ atom_style  atomic
 # setup the system
 #=====================================#
 # Creation of the System
-lattice     fcc 0.7                   # defines lattice type and density
+lattice     fcc 0.8442                # defines lattice type and density
 region      box block 0 10 0 10 0 10  # defines region of simulation box (units lattice)
 create_box    2 box                   # creates simulation box for 2 atom types
 create_atoms  1 box                   # creates atoms of type 1 in box
