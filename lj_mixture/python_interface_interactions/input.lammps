@@ -75,4 +75,5 @@ fix temp all temp/csvr 0.741 0.741 0.05 54324 # enables the v-rescale thermostat
 # NVT (Nose-Hoover)
 #---------------------------#
 # fix ID group-ID style_name keyword value ...
-# fix 1 all nvt temp 0.741 0.741 0.05 # enables postion update -> produce NVT ensemble with Nose-Hoover
+# fix md all nvt temp 0.741 0.741 0.05 # enables postion update -> produce NVT ensemble with Nose-Hoover
+

@@ -33,7 +33,7 @@ def stop():
   global runflag
   runflag = 0
 def settemp(value):
-  global temptarget
+  global target_temp
   temptarget = slider.get()
 def quit():
   global breakflag
@@ -92,7 +92,7 @@ yaxis = [value]
 
 breakflag = 0
 runflag = 0
-temptarget = value
+target_temp = value
 
 # wrapper on PyMol
 # just proc 0 handles reading of dump file and viz
@@ -137,7 +137,7 @@ if me == 0:
   slider = Scale(frame,from_=0.0,to=5.0,resolution=0.1,
                  orient=HORIZONTAL,label="Temperature")
   slider.bind('<ButtonRelease-1>',settemp)
-  slider.set(temptarget)
+  slider.set(target_temp)
   slider.pack(side=LEFT)
   Button(frame,text="Quit",command=quit).pack(side=RIGHT)
   frame.pack()
@@ -157,7 +157,7 @@ if me == 0:
 # after re-invoke of fix langevin, run with pre yes
 
 running = 0
-temp = temptarget
+temp = target_temp
 seed = 12345
 
 lmp.command("fix temp all temp/csvr %g %g 0.05 %d" % (temp,temp,seed))
@@ -168,11 +168,11 @@ while 1:
   if me == 0: tkroot.update()
 
   running, runflag, breakflag = comm.bcast([running, runflag, breakflag])
-  temp, temptarget, seed = comm.bcast([temp, temptarget, seed])
+  temp, target_temp, seed = comm.bcast([temp, target_temp, seed])
 
 
-  if temp != temptarget:
-    temp = temptarget
+  if temp != target_temp:
+    temp = target_temp
     seed += me+1
     lmp.command("fix temp all temp/csvr %g %g 0.05 %d" % (temp, temp, seed))
     # lmp.command("fix temp all temp/berendsen %g %g 0.05 %d" % (temp,temp,seed))

@@ -1,6 +1,6 @@
 # Details
 
-Lennard-Jones mixture (AB) with a python interface to change the temperature.
+Lennard-Jones mixture (AB) with a python interface to change the temperature and interactions.
 
 liquid at temperature =  0.741
 
